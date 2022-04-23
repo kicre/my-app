@@ -21,7 +21,7 @@ set foldmethod=indent
 set foldlevel=99                      " 代码折叠
 set laststatus=2                      " 保留命令行
 set scrolloff=5                       " 在上下移动光标时，光标上方或者下方至少会保留显示的行数
-"set guifont=Powerline_Consolas:h12:cANSI:qDRAFT
+set guifont=NotoMono_NF:h12
 
 " 其他设置
 set showcmd                           " 显示输入的命令
@@ -73,6 +73,5 @@ set fillchars=vert:\
 
 " 插件安装管理器要安装的插件列表 Base URL: https://github.com
 call plug#begin('~/.config/vimPlugin')
-
 call plug#end()
 
