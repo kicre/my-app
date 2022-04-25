@@ -61,8 +61,8 @@ set hidden
 
 
 " 高亮光标所在行和列
-"set cursorline                        " 高亮光标所在行
-"set cursorcolumn                      " 高亮光标所在列
+set cursorline                        " 高亮光标所在行
+set cursorcolumn                      " 高亮光标所在列
 set nobackup
 set nowritebackup
 set t_TI= t_TE=
@@ -73,5 +73,61 @@ set fillchars=vert:\
 
 " 插件安装管理器要安装的插件列表 Base URL: https://github.com
 call plug#begin('~/.config/vimPlugin')
+Plug 'vim-airline/vim-airline'
+Plug 'mattf1n/vimmarp'
 call plug#end()
+
+" 编译
+map  <F9>  :w<CR>:call Run()<CR>
+imap <F9>  <ESC>:w<CR>:call Run()<CR>
+map  <F10> :w<CR>:call Debug()<CR>
+imap <F10> <ESC>:w<CR>:call Debug()<CR>
+
+func!  Debug()
+    if expand("%:e") == "c" || expand("%:e") == "cc" || expand("%:e") == "cxx" || expand("%:e") == "cpp"
+        exe ":setlocal makeprg=".'g++\ %\ -o\ %<\ -gstabs+'
+        echohl WarningMsg | echo " compiling..."
+        silent make
+        exe ":!gdb %<"
+        redraw!
+        echohl WarningMsg | echo " Debug finish! :-)"
+    else
+        redraw!
+        echo "Language not support! :-("
+    endif
+endfunc
+
+func! Run()
+    if expand("%:e") == "py"
+        ! Python -u "%<.py"
+        redraw!
+        echohl WarningMsg | echo " Running finish! :-)"
+    elseif expand("%:e") == "c" || expand("%:e") == "cc" || expand("%:e") == "cxx" || expand("%:e") == "cpp"
+        echo " compiling..."
+        :! g++ "%" -o "%<" && "%<.exe"
+        redraw!
+        echohl WarningMsg | echo " Running finish! :-)"
+    elseif expand("%:e") == "r"
+        exe ":! Rscript %"
+        redraw!
+        echohl WarningMsg | echo " Running finish! :-)"
+    elseif expand("%:e") == "vbs"
+        exe ":! %"
+        redraw!
+        echohl WarningMsg | echo " Running finish! :-)"
+        redraw!
+        echohl WarningMsg | echo " Running finish! :-)"
+    elseif expand("%:e") == "md"
+        :MarkdownPreview
+        redraw!
+        echohl WarningMsg | echo " Running on Chrome! :-)"
+    elseif expand("%:e") == "tex"
+        "<localleader>ll
+        \\ll
+        ":vimtex-compile
+    else
+        redraw!
+        echo "Language not support! :-("
+    endif
+endfunction
 
